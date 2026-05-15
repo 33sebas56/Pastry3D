@@ -1,7 +1,10 @@
-target
+﻿target
 .git
 .github
 .idea
 .vscode
 *.iml
 README.md
+_legacy_before_ai_backend
+.env
+.env.*
