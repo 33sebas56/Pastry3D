@@ -1,3 +1,34 @@
+$ErrorActionPreference = "Stop"
+
+$utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+
+function Write-TextFile {
+    param(
+        [string]$Path,
+        [string]$Content
+    )
+
+    [System.IO.File]::WriteAllText((Join-Path (Get-Location) $Path), $Content, $utf8NoBom)
+    Write-Host "Actualizado: $Path" -ForegroundColor Green
+}
+
+Write-TextFile "src/main/java/com/sebastian/pastry3ddemo/dto/dessert/DessertProjectResponse.java" @'
+package com.sebastian.pastry3ddemo.dto.dessert;
+
+import java.time.OffsetDateTime;
+import java.util.Map;
+import java.util.UUID;
+
+public record DessertProjectResponse(
+        UUID id,
+        String prompt,
+        Map<String, Object> recipeJson,
+        String thumbnailUrl,
+        OffsetDateTime createdAt
+) {}
+'@
+
+Write-TextFile "src/main/java/com/sebastian/pastry3ddemo/mapper/DessertProjectMapper.java" @'
 package com.sebastian.pastry3ddemo.mapper;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -49,7 +80,7 @@ public class DessertProjectMapper {
 
         recipe.put("dessert_type", "round_cake");
         recipe.put("title", "Postre generado");
-        recipe.put("description", "Modelo 3D procedural construido desde una receta bÃ¡sica.");
+        recipe.put("description", "Modelo 3D procedural construido desde una receta básica.");
         recipe.put("visual_style", "premium bakery");
         recipe.put("quality_mode", "preview_and_final");
 
@@ -110,3 +141,8 @@ public class DessertProjectMapper {
         return recipe;
     }
 }
+'@
+
+Write-Host ""
+Write-Host "Respuesta recipeJson corregida." -ForegroundColor Green
+Write-Host "Ahora ejecuta: .\mvnw.cmd clean package -DskipTests" -ForegroundColor Cyan
